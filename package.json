@@ -1,0 +1,25 @@
+{
+  "name": "passport",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.mjs",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/multer": "^3.0.0",
+    "@koa/router": "^10.1.1",
+    "koa": "^2.13.4",
+    "koa-body": "^4.2.0",
+    "koa-ejs": "^4.3.0",
+    "koa-router": "^10.1.1",
+    "koa-static": "^5.0.0",
+    "multer": "^1.4.4",
+    "nodemon": "^2.0.15",
+    "python-shell": "^3.0.1",
+    "tesseract.js": "^2.1.5"
+  }
+}

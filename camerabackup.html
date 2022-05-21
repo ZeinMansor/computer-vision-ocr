@@ -1,0 +1,135 @@
+
+<button id="takeImage" >Capture</button>
+
+
+<video id="webcam" autoplay playsinline width="640" height="480"></video>
+<canvas id="canvas" class="d-none"></canvas>
+<audio id="snapSound" src="./audio/snap.wav" preload = "auto"></audio>
+
+<form method="post" action="" enctype="multipart/form-data" id="myform">
+    <input id="file" type="file" hidden>
+    <button type="submit">Subscribe</button>
+</form>
+
+<!-- 
+<div class="container">
+    <form method="post" action="" enctype="multipart/form-data" id="myform">
+        <div class='preview'>
+            <img src="" id="img" width="100" height="100">
+        </div>
+        <div >
+            <input type="file" id="file" name="file" />
+            <input type="button" class="button" value="Upload" id="but_upload">
+        </div>
+    </form>
+</div> -->
+
+
+
+<script>
+    const webcamElement = document.getElementById('webcam');
+    const canvasElement = document.getElementById('canvas');
+    const snapSoundElement = document.getElementById('snapSound');
+    const webcam = new Webcam(webcamElement, 'user', canvasElement, snapSoundElement);
+
+    var picture = webcam.snap();
+
+    webcam.start()
+        .then(result =>{
+           console.log("webcam started");
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    
+    
+    const takeImage = document.getElementById("takeImage")
+    takeImage.addEventListener("click", captureImage)
+
+        
+    function captureImage(e) {
+        e.preventDefault();
+        var picture = webcam.snap(); 
+        console.log(picture)
+
+        // var form = new FormData();
+
+        // form.append("image", picture)
+        // jQuery.ajax({
+        //     url: "/camera",
+        //     data: form,
+        //     cache: false,
+        //     contentType: false,
+        //     processData: false,
+        //     method: 'POST',
+        //     // type: 'POST', // For jQuery < 1.9
+        //     success: function(data){
+        //         alert(data);
+        //     }
+        // }).catch(err => { console.log(err) })
+    }
+
+    // const form  = document.getElementById('imform');
+
+    // form.addEventListener('submit', (event) => {
+    //     // handle the form data
+    //     event.preventDefault();
+
+    //     var picture = webcam.snap(); 
+    //     var data = new FormData();
+    //     console.log(picture)
+    //     // const selectedFile = document.getElementById('file');
+    //     // selectedFile
+    //     data.append("image", picture);
+    //     data.append("image", "somthing");
+    //     jQuery.ajax({
+    //         url: "/camera",
+    //         data: data,
+    //         cache: false,
+    //         contentType: false,
+    //         processData: false,
+    //         method: 'POST',
+    //         // type: 'POST', // For jQuery < 1.9
+    //         success: function(data){
+    //             alert(data);
+    //         }
+    //     })  
+    // });
+
+
+    // $(document).ready(function(){
+
+    //     $("#but_upload").click(function(){
+        
+    //         var fd = new FormData();
+    //         // var files = $('#file')[0].files;
+            
+    //         var picture = webcam.snap(); 
+    //         var files = [picture];
+
+    //         // Check file selected or not
+    //         if(files.length > 0 ){
+    //            fd.append('file',files[0]);
+            
+    //             $.ajax({
+    //                url: 'camera',
+    //                type: 'post',
+    //                data: fd,
+    //                contentType: false,
+    //                processData: false,
+    //                success: function(response){
+    //                   if(response != 0){
+    //                      $("#img").attr("src",response); 
+    //                      $(".preview img").show(); // Display image element
+    //                   }else{
+    //                      alert('file not uploaded');
+    //                   }
+    //                },
+    //             });
+    //         }else{
+    //            alert("Please select a file.");
+    //         }
+    // });
+// });
+
+</script>
