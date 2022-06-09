@@ -25,11 +25,8 @@ function extractText(file) {
       //   console.log(filterd);
   
       const id = filterd.slice(-2);
-  
-      //     console.log(id);
-  
-      resolve(id)
-      // await worker.terminate();
+    
+      resolve(text)
     });
   }
 

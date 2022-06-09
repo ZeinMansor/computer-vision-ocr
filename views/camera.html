@@ -3,6 +3,9 @@
  
 <div id="results" ></div>
 
+<form id="img-form" action="/camera" method="post" hidden>
+</form>
+
 <script type="text/javascript" src="webcamjs/webcam.min.js"></script>
 
 <script language="JavaScript">
@@ -10,7 +13,8 @@
         width: 320,
         height: 240,
         image_format: 'jpeg',
-        jpeg_quality: 90
+        jpeg_quality: 90,
+        
     });
     Webcam.attach( '#my_camera' );
    
@@ -21,7 +25,7 @@
     Webcam.snap( function(data_uri) {
        // display results in page
        document.getElementById('results').innerHTML = 
-        '<img src="'+data_uri+'"/>';
+        '<img id="imageprev" src="'+data_uri+'"/>';
 
         saveSnap()
     });
@@ -34,11 +38,83 @@
    // Get base64 value from <img id='imageprev'> source
     var base64image = document.getElementById("imageprev").src;
 
-    Webcam.upload( base64image, '/camera', function(code, text) {
-         console.log('Save successfully');
-        console.log(text);
+    var blob = DataURIToBlob(base64image)
+    var formData = new FormData();
+    
+    formData.append('image', blob, "image.png");
+    $.ajax({
+        url: "/camera", 
+        type: "POST", 
+        cache: false,
+        contentType: false,
+        processData: false,
+        data: formData,
+        success: async function(data) {
+            console.log(data)
+            return document.body.innerHTML = data
+            
+        }
     });
    }
+
+   function base64ToBlob(base64, mime) 
+    {
+        mime = mime || '';
+        var sliceSize = 1024;
+        var byteChars = window.atob(base64);
+        var byteArrays = [];
+
+        for (var offset = 0, len = byteChars.length; offset < len; offset += sliceSize) {
+            var slice = byteChars.slice(offset, offset + sliceSize);
+
+            var byteNumbers = new Array(slice.length);
+            for (var i = 0; i < slice.length; i++) {
+                byteNumbers[i] = slice.charCodeAt(i);
+            }
+
+            var byteArray = new Uint8Array(byteNumbers);
+
+            byteArrays.push(byteArray);
+        }
+
+        return new Blob(byteArrays, {type: mime});
+    }
+
+
+    function DataURIToBlob(dataURI) {
+        const splitDataURI = dataURI.split(',')
+        const byteString = splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1])
+        const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
+
+        console.log(mimeString)
+        
+        const ia = new Uint8Array(byteString.length)
+        for (let i = 0; i < byteString.length; i++)
+            ia[i] = byteString.charCodeAt(i)
+
+        return new Blob([ia], { type: "image/png" })
+    }
+
+    function submitFormWithAjax(form) {
+    var form = $(form);
+    var ret = false;
+    $.ajax({
+        url: form.attr('action'),
+        data: form.serialize(),
+        type: (form.attr('method')),
+
+        success: function( data, status, xhttp) {
+             // data will be true or false if you returned a json bool
+             ret = data;
+        },
+        async: true 
+    });
+    return ret;
+}
+
+
+
+}
    
 </script>
 
